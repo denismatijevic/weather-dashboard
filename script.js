@@ -1,5 +1,10 @@
-const APIKey = "0ef0104b53c2f937b6b825321c28b694";
-const APIKeyOpenCage = "28182598852d48bf820fcdaa144f5781";
+$(window).on('load', function(){
+    currentLocation();
+    checkLocalStorage();
+});
+
+var APIKey = "0ef0104b53c2f937b6b825321c28b694";
+var APIKeyOpenCage = "28182598852d48bf820fcdaa144f5781";
 var lat;
 var lon;
 var cityHistory = localStorage.getItem("cityhistory");
@@ -16,12 +21,6 @@ for (let index = 0; index < cityHistory.length; index++) {
     
 }
 }
-
-//     lat = position.coords.latitude;
-//     lon = position.coords.longitude;
-
-// });/ navigator.geolocation.getCurrentPosition(function (position) {
-//
 var d = new Date();
 var weekday = new Array(7);
 weekday[0] = "Sunday";
@@ -34,10 +33,8 @@ weekday[6] = "Saturday";
 var n = weekday[d.getDay()];
 console.log(n);
 
-//need a loop to iterate through the days of the week for the five day forecast
-
 document.getElementById("btn").addEventListener("click", query);
-
+// adding a clear history button
 $("#btn2").on("click", function(){
     window.localStorage.clear();
     location.reload();
@@ -58,7 +55,6 @@ function query() {
         .then(function (response) {
             console.log(queryURLLatLng);
             console.log(response);
-
             lat = response.results[0].geometry.lat;
             lon = response.results[0].geometry.lng;
             var queryURLUV = "https://api.openweathermap.org/data/2.5/uvi?appid=" + APIKey + "&lat=" + lat + "&lon=" + lon;
@@ -70,7 +66,7 @@ function query() {
                     console.log(queryURLUV);
                     console.log(response);
                     $(".UV").html("UV Index: " + response.value);
-
+                        // can't seem to get the UV index to show the ACTUAL UV index, it's show an arbitrary number
                 });
         });
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIKey;
@@ -82,11 +78,9 @@ function query() {
     })
 
         .then(function (response) {
-
-            // Log the queryURL
+            // Log queryURL
             console.log(queryURL);
-
-            // Log the resulting object
+            // Log object response
             console.log(response);
 
             // Transfer content to HTML
@@ -97,14 +91,10 @@ function query() {
             $(".wind").text("Wind Speed: " + response.wind.speed);
             $("#day").text(n);
             $("h3").text("5-Day Forecast for " + city);
-
-            // Log the data in the console as well
             console.log("Wind Speed: " + response.wind.speed);
             console.log("Humidity: " + response.main.humidity);
             console.log("Temperature (F): " + response.main.temp);
         });
-
-
 
     var queryURLFive = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + APIKey;
     $.ajax({
@@ -121,7 +111,6 @@ function query() {
             $(".card-title4").text(weekday[(d.getDay() + 4) % 7]);
             $(".card-title5").text(weekday[(d.getDay() + 5) % 7]);
 
-            //$("#icon1").attr("src", response.list[0].weather[0].icon + ".png");
             $("#icon1").attr("src", "partly cloudy.png");
             $("#temp1").text("Temperature (F): " + response.list[0].main.temp);
             $("#hum1").text("Humidity: " + response.list[0].main.humidity);
@@ -141,9 +130,6 @@ function query() {
             $("#icon5").attr("src", "partly cloudy.png");
             $("#temp5").text("Temperature (F): " + response.list[4].main.temp);
             $("#hum5").text("Humidity: " + response.list[4].main.humidity);
-
-            console.log("Temperature: " + response.list[0].main.temp);
-            console.log("Humidity: " + response.list[0].main.humidity);
 
         });
 }
