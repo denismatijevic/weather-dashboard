@@ -38,6 +38,12 @@ console.log(n);
 
 document.getElementById("btn").addEventListener("click", query);
 
+$("#btn2").on("click", function(){
+    window.localStorage.clear();
+    location.reload();
+
+
+});
 function query() {
     document.getElementById("weatherresponse").style.display = "";
     var city = document.getElementById("citysearch").value;
